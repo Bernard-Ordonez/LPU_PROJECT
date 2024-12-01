@@ -1,0 +1,160 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Function prototypes
+void studentEntry();
+void facultyEntry();
+
+int main() {
+    int userType;
+
+    // Enhanced welcome message with borders and clear options
+    printf("==============================================\n");
+    printf("          Student & Faculty Management\n");
+    printf("==============================================\n");
+
+    printf("Are you a Student or Staff?\n");
+    printf("==============================================\n");
+    printf("Enter 1: Student\n");
+    printf("Enter 2: Staff\n");
+    printf("==============================================\n");
+    printf("Your choice: ");
+    scanf("%d", &userType);
+
+    // Process user input based on choice
+    if (userType == 1) {
+        studentEntry();
+    } else if (userType == 2) {
+        facultyEntry();
+    } else {
+        printf("\nInvalid input. Please enter 1 for Student or 2 for Staff.\n");
+    }
+
+    return 0;
+}
+
+// Function for student entry with design improvements
+void studentEntry() {
+    char studentName[50], studentNumber[20];
+    FILE *file;
+
+    // Clearer prompts and structure for student entry
+    printf("\n==============================================\n");
+    printf("             Student Entry Form\n");
+    printf("==============================================\n");
+
+    printf("Enter Student Name: ");
+    scanf(" %[^\n]", studentName);  // Read full name (supports spaces)
+
+    printf("Enter Student Number: ");
+    scanf("%s", studentNumber);
+
+    // Creating the student file with professional output
+    file = fopen("Student_Performance_Summary.txt", "w");
+    if (file == NULL) {
+        printf("\nError creating file.\n");
+        return;
+    }
+
+    // Write formatted data to the file
+    fprintf(file, "==============================================\n");
+    fprintf(file, "              Student Performance\n");
+    fprintf(file, "==============================================\n");
+    fprintf(file, "Student Name: %s\n", studentName);
+    fprintf(file, "Student Number: %s\n", studentNumber);
+    fprintf(file, "==============================================\n");
+
+    fclose(file);
+    printf("\nFile 'Student Performance Summary' created successfully.\n");
+}
+
+// Function for faculty entry with design enhancements
+void facultyEntry() {
+    int action;
+    char studentName[50], studentNumber[20], yearLevel[10], section[20], subject[50];
+    char filename[100];
+    int attendances, absences;
+    FILE *file;
+
+    // Clearer menu design for faculty entry
+    printf("\n==============================================\n");
+    printf("             Faculty Entry Form\n");
+    printf("==============================================\n");
+    printf("Do you want to open an existing file or create a new one?\n");
+    printf("==============================================\n");
+    printf("Enter 1: Create a new Student Record\n");
+    printf("Enter 2: Open an existing Student Record\n");
+    printf("==============================================\n");
+    printf("Your choice: ");
+    scanf("%d", &action);
+
+    if (action == 1) {
+        // Prompt for student details with organized formatting
+        printf("\n==============================================\n");
+        printf("           New Student Record Entry\n");
+        printf("==============================================\n");
+
+        printf("Enter Student Name: ");
+        scanf(" %[^\n]", studentName);
+        printf("Enter Student Number: ");
+        scanf("%s", studentNumber);
+        printf("Enter Year Level: ");
+        scanf("%s", yearLevel);
+        printf("Enter Section: ");
+        scanf("%s", section);
+        printf("Enter Subject: ");
+        scanf(" %[^\n]", subject);
+
+        // Format the filename
+        sprintf(filename, "%s Student Records.txt", studentName);
+
+        // Create and write to the file with improved structure
+        file = fopen(filename, "w");
+        if (file == NULL) {
+            printf("\nError creating file.\n");
+            return;
+        }
+
+        fprintf(file, "==============================================\n");
+        fprintf(file, "               Student Record\n");
+        fprintf(file, "==============================================\n");
+        fprintf(file, "Student Name: %s\n", studentName);
+        fprintf(file, "Student Number: %s\n", studentNumber);
+        fprintf(file, "Year Level: %s\n", yearLevel);
+        fprintf(file, "Section: %s\n", section);
+        fprintf(file, "Subject: %s\n", subject);
+
+        // Get attendance and absence information
+        printf("\nEnter the number of Attendances: ");
+        scanf("%d", &attendances);
+        printf("Enter the number of Absences: ");
+        scanf("%d", &absences);
+
+        // Write attendance and absence information to the file
+        fprintf(file, "==============================================\n");
+        fprintf(file, "Attendance Information\n");
+        fprintf(file, "==============================================\n");
+        fprintf(file, "Number of Attendances: %d\n", attendances);
+        fprintf(file, "Number of Absences: %d\n", absences);
+        fprintf(file, "==============================================\n");
+
+        fclose(file);
+        printf("\nFile '%s' created successfully.\n", filename);
+    } else if (action == 2) {
+        printf("Enter a file name to open (without extension): ");
+        scanf("%s", filename);
+        
+        strcat(filename, ".txt"); // Adding file extension
+        file = fopen(filename, "r");
+        if (file == NULL) {
+            printf("\nError opening file. It may not exist.\n");
+            return;
+        }
+        
+        fclose(file);
+        printf("\nFile '%s' opened successfully.\n", filename);
+    } else {
+        printf("\nInvalid input. Please enter 1 to create a new file or 2 to open an existing file.\n");
+    }
+}
